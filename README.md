@@ -1,4 +1,4 @@
-# Bilibili Playback Rate Menu
+# Bilibili Video Acceleration （Bilibili Playback Rate Menu）
 
 Chrome 扩展：增强 B 站视频播放器原生倍速菜单，提供 `0.25x` 到 `4x` 的倍速选项，步长为 `0.25x`。
 
