@@ -1,0 +1,31 @@
+.bpx-player-ctrl-playbackrate-menu {
+  height: auto !important;
+  max-height: min(var(--bili-rate-menu-max-height, calc(100vh - 96px)), calc(100vh - 96px)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-color: rgba(255, 255, 255, 0.36) transparent;
+  scrollbar-width: thin;
+}
+
+.bpx-player-ctrl-playbackrate-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.bpx-player-ctrl-playbackrate-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bpx-player-ctrl-playbackrate-menu::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+}
+
+.bpx-player-ctrl-playbackrate-menu::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.46);
+}
+
+.bpx-player-ctrl-playbackrate-menu::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}

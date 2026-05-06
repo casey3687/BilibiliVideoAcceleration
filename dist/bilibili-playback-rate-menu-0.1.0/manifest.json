@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Bilibili Playback Rate Menu",
+  "version": "0.1.0",
+  "description": "Expand Bilibili's native playback-rate menu from 0.25x to 4x in 0.25x steps.",
+  "content_scripts": [
+    {
+      "matches": ["https://www.bilibili.com/*"],
+      "js": ["src/rate-menu-core.js", "content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
