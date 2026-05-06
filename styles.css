@@ -1,6 +1,6 @@
 .bpx-player-ctrl-playbackrate-menu {
   height: auto !important;
-  max-height: calc(100vh - 96px) !important;
+  max-height: min(var(--bili-rate-menu-max-height, calc(100vh - 96px)), calc(100vh - 96px)) !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   scrollbar-color: rgba(255, 255, 255, 0.36) transparent;

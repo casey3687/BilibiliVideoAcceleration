@@ -4,6 +4,8 @@
   const RATE_STEP = 0.25;
   const PATCHED_ATTR = "biliRateMenuPatched";
   const SELECTED_CLASSES = ["bpx-state-active", "bpx-player-ctrl-playbackrate-menu-item-active"];
+  const MENU_VIDEO_GAP = 16;
+  const MENU_MAX_HEIGHT_VAR = "--bili-rate-menu-max-height";
 
   function buildPlaybackRates() {
     const rates = [];
@@ -72,11 +74,44 @@
     return videos.length;
   }
 
+  function getVideoSource(video) {
+    return String(video?.currentSrc || video?.src || "");
+  }
+
+  function findBilibiliVideo(root = global.document) {
+    const videos = Array.from(root.querySelectorAll?.("video") ?? []);
+    return (
+      videos.find((video) => getVideoSource(video).startsWith("blob:https://www.bilibili.com/")) ??
+      videos.find((video) => video.getBoundingClientRect?.().height > 0) ??
+      videos[0] ??
+      null
+    );
+  }
+
+  function syncMenuMaxHeightToVideo(menu, root = global.document) {
+    if (!menu?.style) return null;
+
+    const video = findBilibiliVideo(root);
+    const videoRect = video?.getBoundingClientRect?.();
+    const videoHeight = Number(videoRect?.height ?? 0);
+
+    if (!Number.isFinite(videoHeight) || videoHeight <= 0) {
+      menu.style.removeProperty?.(MENU_MAX_HEIGHT_VAR);
+      return null;
+    }
+
+    const maxHeight = Math.max(0, Math.floor(videoHeight - MENU_VIDEO_GAP));
+    menu.style.setProperty(MENU_MAX_HEIGHT_VAR, `${maxHeight}px`);
+    return maxHeight;
+  }
+
   global.BilibiliPlaybackRateMenu = {
     buildPlaybackRates,
     formatRateLabel,
     patchPlaybackRateMenu,
     setSelectedRate,
     applyPlaybackRateToVideos,
+    findBilibiliVideo,
+    syncMenuMaxHeightToVideo,
   };
 })(globalThis);

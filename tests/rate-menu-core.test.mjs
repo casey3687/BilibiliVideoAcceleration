@@ -48,6 +48,12 @@ class FakeElement {
     this.textContent = "";
     this.parentElement = null;
     this.listeners = new Map();
+    this.style = {
+      values: new Map(),
+      getPropertyValue: (name) => this.style.values.get(name) ?? "",
+      removeProperty: (name) => this.style.values.delete(name),
+      setProperty: (name, value) => this.style.values.set(name, value),
+    };
     this.classList = {
       values: new Set(),
       add: (...names) => names.forEach((name) => this.classList.values.add(name)),
@@ -145,4 +151,29 @@ test("applyPlaybackRateToVideos updates every video in the root", () => {
 
   assert.equal(count, 2);
   assert.deepEqual(videos.map((video) => video.playbackRate), [2.25, 2.25]);
+});
+
+test("syncMenuMaxHeightToVideo limits menu height to Bilibili video display height", () => {
+  const { syncMenuMaxHeightToVideo } = loadCoreApi();
+  const fake = createFakeDocument();
+  const videos = [
+    {
+      currentSrc: "blob:https://other.example/video",
+      getBoundingClientRect: () => ({ height: 720 }),
+    },
+    {
+      src: "blob:https://www.bilibili.com/abc",
+      getBoundingClientRect: () => ({ height: 480 }),
+    },
+  ];
+  const root = {
+    querySelectorAll(selector) {
+      return selector === "video" ? videos : [];
+    },
+  };
+
+  const height = syncMenuMaxHeightToVideo(fake.menu, root);
+
+  assert.equal(height, 464);
+  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "464px");
 });
