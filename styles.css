@@ -1,0 +1,4 @@
+.bpx-player-ctrl-playbackrate-menu {
+  max-height: min(70vh, 460px);
+  overflow-y: auto;
+}
