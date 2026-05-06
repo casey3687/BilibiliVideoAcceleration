@@ -88,19 +88,38 @@
     );
   }
 
+  function getElementRect(element) {
+    const rect = element?.getBoundingClientRect?.();
+    if (!rect) return null;
+    const height = Number(rect.height ?? rect.bottom - rect.top);
+    const top = Number(rect.top ?? 0);
+    const bottom = Number(rect.bottom ?? top + height);
+    if (![height, top, bottom].every(Number.isFinite)) return null;
+    return { top, bottom, height };
+  }
+
+  function getVideoDisplayElement(video) {
+    return video?.closest?.(".bpx-player-video-wrap") ?? video;
+  }
+
   function syncMenuMaxHeightToVideo(menu, root = global.document) {
     if (!menu?.style) return null;
 
     const video = findBilibiliVideo(root);
-    const videoRect = video?.getBoundingClientRect?.();
-    const videoHeight = Number(videoRect?.height ?? 0);
+    const videoRect = getElementRect(getVideoDisplayElement(video));
 
-    if (!Number.isFinite(videoHeight) || videoHeight <= 0) {
+    if (!videoRect || videoRect.height <= 0) {
       menu.style.removeProperty?.(MENU_MAX_HEIGHT_VAR);
       return null;
     }
 
-    const maxHeight = Math.max(0, Math.floor(videoHeight - MENU_VIDEO_GAP));
+    let maxHeight = videoRect.height - MENU_VIDEO_GAP;
+    const controlRect = getElementRect(menu.closest?.(".bpx-player-ctrl-playbackrate"));
+    if (controlRect && controlRect.top > videoRect.top) {
+      maxHeight = Math.min(maxHeight, controlRect.top - videoRect.top - MENU_VIDEO_GAP);
+    }
+
+    maxHeight = Math.max(0, Math.floor(maxHeight));
     menu.style.setProperty(MENU_MAX_HEIGHT_VAR, `${maxHeight}px`);
     return maxHeight;
   }

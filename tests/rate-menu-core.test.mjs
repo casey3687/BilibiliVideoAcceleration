@@ -177,3 +177,39 @@ test("syncMenuMaxHeightToVideo limits menu height to Bilibili video display heig
   assert.equal(height, 464);
   assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "464px");
 });
+
+test("syncMenuMaxHeightToVideo limits menu height to space above the playback control", () => {
+  const { syncMenuMaxHeightToVideo } = loadCoreApi();
+  const fake = createFakeDocument();
+  const videoWrap = {
+    getBoundingClientRect: () => ({ top: 80, bottom: 460, height: 380 }),
+  };
+  const playbackControl = {
+    getBoundingClientRect: () => ({ top: 410, bottom: 442, height: 32 }),
+    querySelector(selector) {
+      if (selector === ".bpx-player-ctrl-playbackrate-result") return fake.result;
+      return null;
+    },
+  };
+  const video = {
+    src: "blob:https://www.bilibili.com/abc",
+    closest(selector) {
+      return selector === ".bpx-player-video-wrap" ? videoWrap : null;
+    },
+    getBoundingClientRect: () => ({ top: 80, bottom: 460, height: 380 }),
+  };
+  const root = {
+    querySelectorAll(selector) {
+      return selector === "video" ? [video] : [];
+    },
+  };
+  fake.menu.closest = (selector) => {
+    if (selector === ".bpx-player-ctrl-playbackrate") return playbackControl;
+    return null;
+  };
+
+  const height = syncMenuMaxHeightToVideo(fake.menu, root);
+
+  assert.equal(height, 314);
+  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "314px");
+});
