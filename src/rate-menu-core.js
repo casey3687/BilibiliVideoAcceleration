@@ -4,7 +4,7 @@
   const RATE_STEP = 0.25;
   const PATCHED_ATTR = "biliRateMenuPatched";
   const SELECTED_CLASSES = ["bpx-state-active", "bpx-player-ctrl-playbackrate-menu-item-active"];
-  const MENU_VIDEO_GAP = 16;
+  const MENU_VIDEO_GAP = 32;
   const MENU_MAX_HEIGHT_VAR = "--bili-rate-menu-max-height";
 
   function buildPlaybackRates() {

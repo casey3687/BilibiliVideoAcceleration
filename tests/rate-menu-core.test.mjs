@@ -174,8 +174,8 @@ test("syncMenuMaxHeightToVideo limits menu height to Bilibili video display heig
 
   const height = syncMenuMaxHeightToVideo(fake.menu, root);
 
-  assert.equal(height, 464);
-  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "464px");
+  assert.equal(height, 448);
+  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "448px");
 });
 
 test("syncMenuMaxHeightToVideo limits menu height to space above the playback control", () => {
@@ -210,8 +210,8 @@ test("syncMenuMaxHeightToVideo limits menu height to space above the playback co
 
   const height = syncMenuMaxHeightToVideo(fake.menu, root);
 
-  assert.equal(height, 314);
-  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "314px");
+  assert.equal(height, 298);
+  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "298px");
 });
 
 test("syncMenuMaxHeightToVideo uses stable rate label instead of expanded menu bounds", () => {
@@ -249,6 +249,6 @@ test("syncMenuMaxHeightToVideo uses stable rate label instead of expanded menu b
 
   const height = syncMenuMaxHeightToVideo(fake.menu, root);
 
-  assert.equal(height, 314);
-  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "314px");
+  assert.equal(height, 298);
+  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "298px");
 });
