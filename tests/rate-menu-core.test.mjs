@@ -213,3 +213,42 @@ test("syncMenuMaxHeightToVideo limits menu height to space above the playback co
   assert.equal(height, 314);
   assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "314px");
 });
+
+test("syncMenuMaxHeightToVideo uses stable rate label instead of expanded menu bounds", () => {
+  const { syncMenuMaxHeightToVideo } = loadCoreApi();
+  const fake = createFakeDocument();
+  const videoWrap = {
+    getBoundingClientRect: () => ({ top: 80, bottom: 460, height: 380 }),
+  };
+  const rateLabel = {
+    getBoundingClientRect: () => ({ top: 410, bottom: 442, height: 32 }),
+  };
+  const expandedPlaybackControl = {
+    getBoundingClientRect: () => ({ top: 120, bottom: 442, height: 322 }),
+    querySelector(selector) {
+      if (selector === ".bpx-player-ctrl-playbackrate-result") return rateLabel;
+      return null;
+    },
+  };
+  const video = {
+    src: "blob:https://www.bilibili.com/abc",
+    closest(selector) {
+      return selector === ".bpx-player-video-wrap" ? videoWrap : null;
+    },
+    getBoundingClientRect: () => ({ top: 80, bottom: 460, height: 380 }),
+  };
+  const root = {
+    querySelectorAll(selector) {
+      return selector === "video" ? [video] : [];
+    },
+  };
+  fake.menu.closest = (selector) => {
+    if (selector === ".bpx-player-ctrl-playbackrate") return expandedPlaybackControl;
+    return null;
+  };
+
+  const height = syncMenuMaxHeightToVideo(fake.menu, root);
+
+  assert.equal(height, 314);
+  assert.equal(fake.menu.style.getPropertyValue("--bili-rate-menu-max-height"), "314px");
+});

@@ -102,6 +102,12 @@
     return video?.closest?.(".bpx-player-video-wrap") ?? video;
   }
 
+  function getPlaybackRateAnchorRect(menu) {
+    const control = menu?.closest?.(".bpx-player-ctrl-playbackrate");
+    const result = control?.querySelector?.(".bpx-player-ctrl-playbackrate-result");
+    return getElementRect(result) ?? getElementRect(control);
+  }
+
   function syncMenuMaxHeightToVideo(menu, root = global.document) {
     if (!menu?.style) return null;
 
@@ -114,7 +120,7 @@
     }
 
     let maxHeight = videoRect.height - MENU_VIDEO_GAP;
-    const controlRect = getElementRect(menu.closest?.(".bpx-player-ctrl-playbackrate"));
+    const controlRect = getPlaybackRateAnchorRect(menu);
     if (controlRect && controlRect.top > videoRect.top) {
       maxHeight = Math.min(maxHeight, controlRect.top - videoRect.top - MENU_VIDEO_GAP);
     }
